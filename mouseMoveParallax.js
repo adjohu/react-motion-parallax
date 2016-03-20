@@ -16,12 +16,22 @@ class MouseMoveParallax extends React.Component {
       centerX: 0,
       centerY: 0
     }
+
+    this.handleResize = throttle(::this.handleResize, 80);
+    this.handleMouseMove = throttle(::this.handleMouseMove, 80);
+    this.handleTouchMove = throttle(::this.handleTouchMove, 80);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('touchmove', this.handleTouchMove);
+    window.removeEventListener('mousemove', this.handleMouseMove);
+    window.removeEventListener('resize', this.handleResize);
   }
 
   componentDidMount() {
-    window.addEventListener('touchmove', throttle(::this.handleTouchMove, 80));
-    window.addEventListener('mousemove', throttle(::this.handleMouseMove, 80));
-    window.addEventListener('resize', throttle(::this.handleResize, 80));
+    window.addEventListener('touchmove', this.handleTouchMove);
+    window.addEventListener('mousemove', this.handleMouseMove);
+    window.addEventListener('resize', this.handleResize);
     this.handleResize();
   }
 
